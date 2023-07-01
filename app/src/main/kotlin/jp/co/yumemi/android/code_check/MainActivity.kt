@@ -9,7 +9,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import jp.co.yumemi.android.code_check.repository.search.RepositorySearchScreen
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 import java.util.Date
 
@@ -37,6 +39,9 @@ class MainActivity : ComponentActivity() {
 fun AppRoot() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "") {
+    NavHost(navController = navController, startDestination = "repository/search") {
+        composable("repository/search") {
+            RepositorySearchScreen()
+        }
     }
 }
