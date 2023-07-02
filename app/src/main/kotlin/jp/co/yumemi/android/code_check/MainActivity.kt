@@ -16,13 +16,8 @@ import androidx.navigation.navArgument
 import jp.co.yumemi.android.code_check.repository.detail.RepositoryDetailScreen
 import jp.co.yumemi.android.code_check.repository.search.RepositorySearchScreen
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
-import java.util.Date
 
 class MainActivity : ComponentActivity() {
-
-    companion object {
-        lateinit var lastSearchDate: Date
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
