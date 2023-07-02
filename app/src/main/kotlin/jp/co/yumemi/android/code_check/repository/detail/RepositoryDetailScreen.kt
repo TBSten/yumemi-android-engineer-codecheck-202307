@@ -1,6 +1,5 @@
 package jp.co.yumemi.android.code_check.repository.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,10 +13,11 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import jp.co.yumemi.android.code_check.repository.GithubRepository
 import jp.co.yumemi.android.code_check.repository.exampleGithubRepository
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
@@ -49,16 +49,25 @@ fun RepositoryDetailContent(
     repository: GithubRepository,
 ) {
     Column(Modifier.padding(horizontal = 8.dp)) {
-        // TODO repository.ownerIconUrl
-        Box(
-            Modifier.padding(8.dp).background(Color.Gray).size(250.dp)
+        val imageModifier =
+            Modifier
+                .padding(8.dp)
+                .size(250.dp)
                 .align(Alignment.CenterHorizontally)
+
+        AsyncImage(
+            model = repository.ownerIconUrl,
+            contentDescription = null,
+            contentScale = ContentScale.Inside,
+            modifier = imageModifier,
         )
+
         Text(
             text = repository.name,
             fontSize = 24.sp,
             modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 16.dp),
         )
+
         Row {
             Text(
                 text = "Written in ${repository.language}",
