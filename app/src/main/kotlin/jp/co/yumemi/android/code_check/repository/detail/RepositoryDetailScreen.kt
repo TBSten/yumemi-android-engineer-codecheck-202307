@@ -29,7 +29,7 @@ fun RepositoryDetailScreen(
     val repository: GithubRepository? = exampleGithubRepository
 
     Scaffold(
-        topBar = { RepositoryDetailTopBar() }
+        topBar = { RepositoryDetailTopBar(repositoryName) }
     ) {
         Box(Modifier.padding(it)) {
             if (repository == null) {
@@ -84,9 +84,9 @@ fun RepositoryDetailContent(
 }
 
 @Composable
-private fun RepositoryDetailTopBar() {
+private fun RepositoryDetailTopBar(repositoryName: String?) {
     TopAppBar(
-        title = { Text("") },
+        title = { Text(repositoryName ?: "レポジトリの詳細") },
     )
 }
 
