@@ -7,7 +7,7 @@ import androidx.compose.ui.graphics.Color
 private val DarkColorPalette = darkColors(
     primary = Color(0xFFBB86FC),
     primaryVariant = Color(0xFF3700B3),
-    secondary = Color(0xFF03DAC5)
+    secondary = Color(0xFF03DAC5),
 )
 
 private val LightColorPalette = lightColors(
@@ -16,4 +16,4 @@ private val LightColorPalette = lightColors(
     secondary = Color(0xFF03DAC5),
 )
 
-fun colors(isDarkTheme:Boolean) = if(isDarkTheme) DarkColorPalette else LightColorPalette
+fun colors(isDarkTheme: Boolean) = if (isDarkTheme) DarkColorPalette else LightColorPalette
