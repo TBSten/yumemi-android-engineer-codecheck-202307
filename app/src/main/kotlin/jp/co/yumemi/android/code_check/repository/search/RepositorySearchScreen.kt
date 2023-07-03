@@ -29,6 +29,7 @@ import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 @Composable
 fun RepositorySearchScreen(
     searchViewModel: RepositorySearchViewModel = hiltViewModel(),
+    gotoRepositoryDetailScreen: (GithubRepoData) -> Unit,
 ) {
     // 検証用
     val text by searchViewModel.searchQuery.collectAsState()
@@ -39,7 +40,7 @@ fun RepositorySearchScreen(
         onChangeSearchQuery = { searchViewModel.updateSearchQuery(it) },
         repositories = repositoriesUiState.repositories,
         onSearchRepositories = { searchViewModel.searchRepository() },
-        onClickRepository = { /* TODO goto detail page */ },
+        onClickRepository = { gotoRepositoryDetailScreen(it) },
     )
 }
 
