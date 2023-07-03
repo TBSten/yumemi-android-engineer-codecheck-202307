@@ -1,6 +1,6 @@
 package jp.co.yumemi.android.code_check.github.model
 
-data class GithubRepository(
+data class GithubRepoData(
     val name: String,
     val ownerIconUrl: String,
     val language: String,
@@ -10,7 +10,7 @@ data class GithubRepository(
     val openIssuesCount: Long,
 )
 
-val exampleGithubRepository = GithubRepository(
+val exampleGithubRepoData = GithubRepoData(
     name = "mock repository",
     ownerIconUrl = "...",
     language = "...",
