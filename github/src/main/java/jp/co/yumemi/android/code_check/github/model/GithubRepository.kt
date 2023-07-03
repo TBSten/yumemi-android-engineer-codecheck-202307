@@ -1,4 +1,4 @@
-package jp.co.yumemi.android.code_check.repository
+package jp.co.yumemi.android.code_check.github.model
 
 data class GithubRepository(
     val name: String,

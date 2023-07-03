@@ -23,15 +23,16 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.repository.GithubRepository
-import jp.co.yumemi.android.code_check.repository.exampleGithubRepository
+import jp.co.yumemi.android.code_check.github.model.GithubRepository
+import jp.co.yumemi.android.code_check.github.model.exampleGithubRepository
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 @Composable
 fun RepositorySearchScreen() {
     // 検証用
     var text by remember { mutableStateOf("") }
-    val repositories = remember { List(10) { exampleGithubRepository } }
+    val repositories =
+        remember { List(10) { jp.co.yumemi.android.code_check.github.model.exampleGithubRepository } }
 
     RepositorySearchContent(
         searchQuery = text,
@@ -45,8 +46,8 @@ fun RepositorySearchScreen() {
 private fun RepositorySearchContent(
     searchQuery: String,
     onChangeSearchQuery: (String) -> Unit,
-    repositories: List<GithubRepository>?,
-    onClickRepository: (GithubRepository) -> Unit,
+    repositories: List<jp.co.yumemi.android.code_check.github.model.GithubRepository>?,
+    onClickRepository: (jp.co.yumemi.android.code_check.github.model.GithubRepository) -> Unit,
 ) {
     Scaffold(
         topBar = { RepositorySearchTopBar() },
@@ -98,7 +99,7 @@ annotation class LightDarkPreviews
 @LightDarkPreviews
 @Composable
 fun RepositorySearchContentPreview(
-    @PreviewParameter(PreviewGithubRepositoryProvider::class) repositories: List<GithubRepository>?,
+    @PreviewParameter(PreviewGithubRepositoryProvider::class) repositories: List<jp.co.yumemi.android.code_check.github.model.GithubRepository>?,
 ) {
     CodeCheckTheme {
         RepositorySearchContent(
@@ -111,12 +112,13 @@ fun RepositorySearchContentPreview(
     }
 }
 
-private class PreviewGithubRepositoryProvider : PreviewParameterProvider<List<GithubRepository>?> {
+private class PreviewGithubRepositoryProvider :
+    PreviewParameterProvider<List<jp.co.yumemi.android.code_check.github.model.GithubRepository>?> {
     override val values
         get() = sequenceOf(
             null,
             listOf(),
-            listOf(exampleGithubRepository),
-            List(100) { exampleGithubRepository },
+            listOf(jp.co.yumemi.android.code_check.github.model.exampleGithubRepository),
+            List(100) { jp.co.yumemi.android.code_check.github.model.exampleGithubRepository },
         )
 }

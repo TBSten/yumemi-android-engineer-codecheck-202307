@@ -18,15 +18,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import jp.co.yumemi.android.code_check.repository.GithubRepository
-import jp.co.yumemi.android.code_check.repository.exampleGithubRepository
+import jp.co.yumemi.android.code_check.github.model.GithubRepository
+import jp.co.yumemi.android.code_check.github.model.exampleGithubRepository
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 @Composable
 fun RepositoryDetailScreen(
     repositoryName: String?,
 ) {
-    val repository: GithubRepository? = exampleGithubRepository
+    val repository: jp.co.yumemi.android.code_check.github.model.GithubRepository? =
+        jp.co.yumemi.android.code_check.github.model.exampleGithubRepository
 
     Scaffold(
         topBar = { RepositoryDetailTopBar(repositoryName) }
@@ -46,7 +47,7 @@ fun RepositoryDetailScreen(
 
 @Composable
 fun RepositoryDetailContent(
-    repository: GithubRepository,
+    repository: jp.co.yumemi.android.code_check.github.model.GithubRepository,
 ) {
     Column(Modifier.padding(horizontal = 8.dp)) {
         val imageModifier =
@@ -103,7 +104,7 @@ fun RepositoryDetailContentPreview() {
     CodeCheckTheme {
         Surface {
             RepositoryDetailContent(
-                repository = exampleGithubRepository,
+                repository = jp.co.yumemi.android.code_check.github.model.exampleGithubRepository,
             )
         }
     }
