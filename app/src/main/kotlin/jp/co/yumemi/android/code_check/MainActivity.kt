@@ -13,10 +13,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import dagger.hilt.android.AndroidEntryPoint
 import jp.co.yumemi.android.code_check.repository.detail.RepositoryDetailScreen
 import jp.co.yumemi.android.code_check.repository.search.RepositorySearchScreen
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
