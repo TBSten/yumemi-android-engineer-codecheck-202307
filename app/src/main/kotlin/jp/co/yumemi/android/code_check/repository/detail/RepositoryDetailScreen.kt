@@ -11,6 +11,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,6 +32,11 @@ fun RepositoryDetailScreen(
     detailViewModel: RepositoryDetailViewModel = hiltViewModel(),
 ) {
     val repositoryUiState by detailViewModel.repositoryUiState.collectAsState()
+    LaunchedEffect(repositoryName) {
+        repositoryName?.let {
+            detailViewModel.initRepository(repositoryName)
+        }
+    }
 
     Scaffold(
         topBar = { RepositoryDetailTopBar(repositoryName) }
