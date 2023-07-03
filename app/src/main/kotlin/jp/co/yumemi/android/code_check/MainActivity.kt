@@ -41,7 +41,7 @@ fun AppRoot() {
 
     NavHost(
         navController = navController,
-        startDestination = "repository/detail?repositoryName=xxx"
+        startDestination = "repository/search",
     ) {
         composable("repository/search") {
             RepositorySearchScreen()

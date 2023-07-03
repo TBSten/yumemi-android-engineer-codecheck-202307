@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -24,6 +26,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -32,6 +35,7 @@ fun SearchBar(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
+    onSearch: () -> Unit,
 ) {
     var hasFocus by remember { mutableStateOf(false) }
 
@@ -60,6 +64,12 @@ fun SearchBar(
                 textStyle = TextStyle.Default.copy(color = textColor),
                 singleLine = true,
                 cursorBrush = SolidColor(textColor),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search,
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = { onSearch() },
+                ),
             )
             IconButton(
                 modifier = Modifier.alpha(if (hasFocus) 0.8f else 0f),
@@ -80,5 +90,6 @@ private fun SearchBarPreview() {
     SearchBar(
         value = "preview search bar",
         onValueChange = {},
+        onSearch = {},
     )
 }

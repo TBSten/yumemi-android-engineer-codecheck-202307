@@ -1,5 +1,6 @@
 package jp.co.yumemi.android.code_check.github.model
 
+import android.util.Log
 import com.squareup.moshi.Json
 import retrofit2.Response
 import retrofit2.http.GET
@@ -12,36 +13,41 @@ interface GithubRepoService {
     suspend fun search(@Query("q") searchQuery: String): Response<SearchResponse>
 
     data class SearchResponse(
-        val items: List<RepoData>
+        val items: List<RepoData>,
     )
 
     data class RepoData(
         val name: String,
         val owner: Owner,
         val language: String,
-        @Json(name = "stargazers_count")
+        @field:Json(name = "stargazers_count")
         val stargazersCount: Long,
-        @Json(name = "watchers_count")
+        @field:Json(name = "watchers_count")
         val watchersCount: Long,
-        @Json(name = "forks_count")
+        @field:Json(name = "forks_count")
         val forksCount: Long,
-        @Json(name = "open_issues_count")
+        @field:Json(name = "open_issues_count")
         val openIssuesCount: Long,
     ) {
         data class Owner(
-            @Json(name = "avatar_url")
+            @field:Json(name = "avatar_url")
             val avatarUrl: String,
         )
 
-        fun toGithubRepoData(): GithubRepoData =
-            GithubRepoData(
+        fun toGithubRepoData(): GithubRepoData {
+            Log.d("convert", "$this")
+            return exampleGithubRepoData.copy(
                 name = this.name,
-                ownerIconUrl = this.owner.avatarUrl,
-                language = this.language,
-                stargazersCount = this.stargazersCount,
-                watchersCount = this.watchersCount,
-                forksCount = this.forksCount,
-                openIssuesCount = this.openIssuesCount,
             )
+        }
+//            GithubRepoData(
+//                name = this.name,
+//                ownerIconUrl = "https://tbsten.me/tbsten500x500.png",
+//                language = "",
+//                stargazersCount = this.stargazersCount,
+//                watchersCount = this.watchersCount,
+//                forksCount = this.forksCount,
+//                openIssuesCount = this.openIssuesCount,
+//            )
     }
 }

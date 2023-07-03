@@ -38,6 +38,7 @@ fun RepositorySearchScreen(
         searchQuery = text,
         onChangeSearchQuery = { searchViewModel.updateSearchQuery(it) },
         repositories = repositoriesUiState.repositories,
+        onSearchRepositories = { searchViewModel.searchRepository() },
         onClickRepository = { /* TODO goto detail page */ },
     )
 }
@@ -47,6 +48,7 @@ private fun RepositorySearchContent(
     searchQuery: String,
     onChangeSearchQuery: (String) -> Unit,
     repositories: List<GithubRepoData>?,
+    onSearchRepositories: () -> Unit,
     onClickRepository: (GithubRepoData) -> Unit,
 ) {
     Scaffold(
@@ -62,6 +64,7 @@ private fun RepositorySearchContent(
                 SearchBar(
                     value = searchQuery,
                     onValueChange = onChangeSearchQuery,
+                    onSearch = { onSearchRepositories() },
                 )
             }
             if (repositories.isNullOrEmpty()) {
@@ -106,6 +109,7 @@ fun RepositorySearchContentPreview(
             searchQuery = "kotlin",
             onChangeSearchQuery = {},
             repositories = repositories,
+            onSearchRepositories = {},
             onClickRepository = {},
         )
         Text("${isSystemInDarkTheme()}")
