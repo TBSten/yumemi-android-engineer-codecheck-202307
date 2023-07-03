@@ -12,12 +12,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import jp.co.yumemi.android.code_check.repository.GithubRepository
+import jp.co.yumemi.android.code_check.github.model.GithubRepoData
 
 @Composable
 fun RepositoryList(
-    repositories: List<GithubRepository>,
-    onClickRepository: (GithubRepository) -> Unit,
+    repositories: List<GithubRepoData>,
+    onClickRepository: (GithubRepoData) -> Unit,
 ) {
     LazyColumn(Modifier.fillMaxSize()) {
         items(repositories) { repository ->

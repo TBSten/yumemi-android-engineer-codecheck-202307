@@ -11,26 +11,37 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import jp.co.yumemi.android.code_check.repository.GithubRepository
-import jp.co.yumemi.android.code_check.repository.exampleGithubRepository
+import jp.co.yumemi.android.code_check.github.model.GithubRepoData
+import jp.co.yumemi.android.code_check.github.model.exampleGithubRepoData
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 @Composable
 fun RepositoryDetailScreen(
     repositoryName: String?,
+    detailViewModel: RepositoryDetailViewModel = hiltViewModel(),
 ) {
-    val repository: GithubRepository? = exampleGithubRepository
+    val repositoryUiState by detailViewModel.repositoryUiState.collectAsState()
+    LaunchedEffect(repositoryName) {
+        repositoryName?.let {
+            detailViewModel.initRepository(repositoryName)
+        }
+    }
 
     Scaffold(
         topBar = { RepositoryDetailTopBar(repositoryName) }
     ) {
+        val repository = repositoryUiState.repository
         Box(Modifier.padding(it)) {
             if (repository == null) {
                 RepositoryNotFound()
@@ -46,7 +57,7 @@ fun RepositoryDetailScreen(
 
 @Composable
 fun RepositoryDetailContent(
-    repository: GithubRepository,
+    repository: GithubRepoData,
 ) {
     Column(Modifier.padding(horizontal = 8.dp)) {
         val imageModifier =
@@ -103,7 +114,7 @@ fun RepositoryDetailContentPreview() {
     CodeCheckTheme {
         Surface {
             RepositoryDetailContent(
-                repository = exampleGithubRepository,
+                repository = exampleGithubRepoData,
             )
         }
     }

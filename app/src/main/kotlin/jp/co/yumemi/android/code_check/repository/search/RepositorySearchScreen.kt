@@ -11,10 +11,8 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,21 +20,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.yumemi.android.code_check.R
-import jp.co.yumemi.android.code_check.repository.GithubRepository
-import jp.co.yumemi.android.code_check.repository.exampleGithubRepository
+import jp.co.yumemi.android.code_check.github.model.GithubRepoData
+import jp.co.yumemi.android.code_check.github.model.exampleGithubRepoData
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 @Composable
-fun RepositorySearchScreen() {
+fun RepositorySearchScreen(
+    searchViewModel: RepositorySearchViewModel = hiltViewModel(),
+) {
     // 検証用
-    var text by remember { mutableStateOf("") }
-    val repositories = remember { List(10) { exampleGithubRepository } }
+    val text by searchViewModel.searchQuery.collectAsState()
+    val repositoriesUiState by searchViewModel.repositoriesUiState.collectAsState()
 
     RepositorySearchContent(
         searchQuery = text,
-        onChangeSearchQuery = { text = it },
-        repositories = repositories,
+        onChangeSearchQuery = { searchViewModel.updateSearchQuery(it) },
+        repositories = repositoriesUiState.repositories,
         onClickRepository = { /* TODO goto detail page */ },
     )
 }
@@ -45,8 +46,8 @@ fun RepositorySearchScreen() {
 private fun RepositorySearchContent(
     searchQuery: String,
     onChangeSearchQuery: (String) -> Unit,
-    repositories: List<GithubRepository>?,
-    onClickRepository: (GithubRepository) -> Unit,
+    repositories: List<GithubRepoData>?,
+    onClickRepository: (GithubRepoData) -> Unit,
 ) {
     Scaffold(
         topBar = { RepositorySearchTopBar() },
@@ -98,7 +99,7 @@ annotation class LightDarkPreviews
 @LightDarkPreviews
 @Composable
 fun RepositorySearchContentPreview(
-    @PreviewParameter(PreviewGithubRepositoryProvider::class) repositories: List<GithubRepository>?,
+    @PreviewParameter(PreviewGithubRepoDataProvider::class) repositories: List<GithubRepoData>?,
 ) {
     CodeCheckTheme {
         RepositorySearchContent(
@@ -111,12 +112,13 @@ fun RepositorySearchContentPreview(
     }
 }
 
-private class PreviewGithubRepositoryProvider : PreviewParameterProvider<List<GithubRepository>?> {
+private class PreviewGithubRepoDataProvider :
+    PreviewParameterProvider<List<GithubRepoData>?> {
     override val values
         get() = sequenceOf(
             null,
             listOf(),
-            listOf(exampleGithubRepository),
-            List(100) { exampleGithubRepository },
+            listOf(exampleGithubRepoData),
+            List(100) { exampleGithubRepoData },
         )
 }
