@@ -1,6 +1,5 @@
 package jp.co.yumemi.android.code_check.github.model
 
-import android.util.Log
 import com.squareup.moshi.Json
 import retrofit2.Response
 import retrofit2.http.GET
@@ -35,19 +34,16 @@ interface GithubRepoService {
         )
 
         fun toGithubRepoData(): GithubRepoData {
-            Log.d("convert", "$this")
-            return exampleGithubRepoData.copy(
+            return GithubRepoData(
                 name = this.name,
+                ownerIconUrl = "https://tbsten.me/tbsten500x500.png",
+                language = "",
+                stargazersCount = this.stargazersCount,
+                watchersCount = this.watchersCount,
+                forksCount = this.forksCount,
+                openIssuesCount = this.openIssuesCount,
             )
+
         }
-//            GithubRepoData(
-//                name = this.name,
-//                ownerIconUrl = "https://tbsten.me/tbsten500x500.png",
-//                language = "",
-//                stargazersCount = this.stargazersCount,
-//                watchersCount = this.watchersCount,
-//                forksCount = this.forksCount,
-//                openIssuesCount = this.openIssuesCount,
-//            )
     }
 }

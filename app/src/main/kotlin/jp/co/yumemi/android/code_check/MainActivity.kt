@@ -45,7 +45,7 @@ fun AppRoot() {
     ) {
         composable("repository/search") {
             RepositorySearchScreen(
-                gotoRepositoryDetailScreen = { navController.navigate("repository/detail?repositoryName={${it.name}}") },
+                gotoRepositoryDetailScreen = { navController.navigate("repository/detail?repositoryName=${it.name}") },
             )
         }
         composable(
