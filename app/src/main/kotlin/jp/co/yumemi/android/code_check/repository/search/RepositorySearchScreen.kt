@@ -29,6 +29,7 @@ import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 @Composable
 fun RepositorySearchScreen(
     searchViewModel: RepositorySearchViewModel = hiltViewModel(),
+    gotoRepositoryDetailScreen: (GithubRepoData) -> Unit,
 ) {
     // 検証用
     val text by searchViewModel.searchQuery.collectAsState()
@@ -38,7 +39,8 @@ fun RepositorySearchScreen(
         searchQuery = text,
         onChangeSearchQuery = { searchViewModel.updateSearchQuery(it) },
         repositories = repositoriesUiState.repositories,
-        onClickRepository = { /* TODO goto detail page */ },
+        onSearchRepositories = { searchViewModel.searchRepository() },
+        onClickRepository = { gotoRepositoryDetailScreen(it) },
     )
 }
 
@@ -47,6 +49,7 @@ private fun RepositorySearchContent(
     searchQuery: String,
     onChangeSearchQuery: (String) -> Unit,
     repositories: List<GithubRepoData>?,
+    onSearchRepositories: () -> Unit,
     onClickRepository: (GithubRepoData) -> Unit,
 ) {
     Scaffold(
@@ -62,6 +65,7 @@ private fun RepositorySearchContent(
                 SearchBar(
                     value = searchQuery,
                     onValueChange = onChangeSearchQuery,
+                    onSearch = { onSearchRepositories() },
                 )
             }
             if (repositories.isNullOrEmpty()) {
@@ -106,6 +110,7 @@ fun RepositorySearchContentPreview(
             searchQuery = "kotlin",
             onChangeSearchQuery = {},
             repositories = repositories,
+            onSearchRepositories = {},
             onClickRepository = {},
         )
         Text("${isSystemInDarkTheme()}")
