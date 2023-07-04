@@ -81,7 +81,7 @@ fun RepositoryDetailContent(
 
         Row {
             Text(
-                text = "Written in ${repository.language}",
+                text = if (repository.language != null) "Written in ${repository.language}" else "",
                 modifier = Modifier.weight(1f),
             )
             Column(Modifier.weight(1f), horizontalAlignment = Alignment.End) {

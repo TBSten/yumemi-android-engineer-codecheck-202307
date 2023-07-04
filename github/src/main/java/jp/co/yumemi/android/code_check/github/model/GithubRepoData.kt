@@ -2,8 +2,8 @@ package jp.co.yumemi.android.code_check.github.model
 
 data class GithubRepoData(
     val name: String,
-    val ownerIconUrl: String,
-    val language: String,
+    val ownerIconUrl: String?,
+    val language: String?,
     val stargazersCount: Long,
     val watchersCount: Long,
     val forksCount: Long,

@@ -14,6 +14,7 @@ class GithubRepoDataRepository @Inject constructor(
 
     private var repositoriesCache = listOf<GithubRepoData>()
     suspend fun searchRepositories(searchQuery: String): List<GithubRepoData> {
+        Log.d("search repositories", "${githubRepoService.search(searchQuery).body()}")
         val repositories = githubRepoService.search(searchQuery)
             .body()?.items
             ?.map { it.toGithubRepoData() }

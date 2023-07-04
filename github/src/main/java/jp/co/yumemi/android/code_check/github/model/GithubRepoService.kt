@@ -1,5 +1,6 @@
 package jp.co.yumemi.android.code_check.github.model
 
+import android.util.Log
 import com.squareup.moshi.Json
 import retrofit2.Response
 import retrofit2.http.GET
@@ -17,8 +18,8 @@ interface GithubRepoService {
 
     data class RepoData(
         val name: String,
-        val owner: Owner,
-        val language: String,
+        val owner: Owner?,
+        val language: String?,
         @field:Json(name = "stargazers_count")
         val stargazersCount: Long,
         @field:Json(name = "watchers_count")
@@ -34,10 +35,11 @@ interface GithubRepoService {
         )
 
         fun toGithubRepoData(): GithubRepoData {
+            Log.d("to repo data", "${this}")
             return GithubRepoData(
                 name = this.name,
-                ownerIconUrl = "https://tbsten.me/tbsten500x500.png",
-                language = "",
+                ownerIconUrl = this.owner?.avatarUrl,
+                language = this.language,
                 stargazersCount = this.stargazersCount,
                 watchersCount = this.watchersCount,
                 forksCount = this.forksCount,
