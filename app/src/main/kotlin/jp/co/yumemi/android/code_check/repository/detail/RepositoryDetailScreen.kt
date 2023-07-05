@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -42,8 +45,11 @@ fun RepositoryDetailScreen(
         topBar = { RepositoryDetailTopBar(repositoryName) }
     ) {
         val repository = repositoryUiState.repository
+        val isLoading = repositoryUiState.isLoading
         Box(Modifier.padding(it)) {
-            if (repository == null) {
+            if (isLoading) {
+                RepositoryLoading()
+            } else if (repository == null) {
                 RepositoryNotFound()
             } else {
                 RepositoryDetailContent(
@@ -59,7 +65,8 @@ fun RepositoryDetailScreen(
 fun RepositoryDetailContent(
     repository: GithubRepoData,
 ) {
-    Column(Modifier.padding(horizontal = 8.dp)) {
+    val scrollState = rememberScrollState()
+    Column(Modifier.verticalScroll(scrollState).padding(horizontal = 8.dp)) {
         val imageModifier =
             Modifier
                 .padding(8.dp)
@@ -105,6 +112,13 @@ private fun RepositoryDetailTopBar(repositoryName: String?) {
 private fun RepositoryNotFound() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("レポジトリが見つかりませんでした...")
+    }
+}
+
+@Composable
+private fun RepositoryLoading() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
 
