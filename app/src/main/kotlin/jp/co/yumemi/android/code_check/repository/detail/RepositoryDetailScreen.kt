@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -44,8 +45,11 @@ fun RepositoryDetailScreen(
         topBar = { RepositoryDetailTopBar(repositoryName) }
     ) {
         val repository = repositoryUiState.repository
+        val isLoading = repositoryUiState.isLoading
         Box(Modifier.padding(it)) {
-            if (repository == null) {
+            if (isLoading) {
+                RepositoryLoading()
+            } else if (repository == null) {
                 RepositoryNotFound()
             } else {
                 RepositoryDetailContent(
@@ -108,6 +112,13 @@ private fun RepositoryDetailTopBar(repositoryName: String?) {
 private fun RepositoryNotFound() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text("レポジトリが見つかりませんでした...")
+    }
+}
+
+@Composable
+private fun RepositoryLoading() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator()
     }
 }
 
