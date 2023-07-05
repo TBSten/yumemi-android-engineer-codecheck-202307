@@ -24,7 +24,7 @@ class RepositorySearchViewModel @Inject constructor(
         RepositoriesUiState(
             isSearching = false,
             isError = false,
-            repositories = emptyList(),
+            repositories = null,
         )
     )
     val repositoriesUiState = _repositoriesUiState.asStateFlow()
@@ -62,5 +62,5 @@ class RepositorySearchViewModel @Inject constructor(
 data class RepositoriesUiState(
     val isSearching: Boolean,
     val isError: Boolean,
-    val repositories: List<GithubRepoData>,
+    val repositories: List<GithubRepoData>?,
 )

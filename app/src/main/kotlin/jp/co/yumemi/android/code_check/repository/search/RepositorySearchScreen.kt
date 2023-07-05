@@ -2,11 +2,14 @@ package jp.co.yumemi.android.code_check.repository.search
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -38,6 +41,8 @@ fun RepositorySearchScreen(
     RepositorySearchContent(
         searchQuery = text,
         onChangeSearchQuery = { searchViewModel.updateSearchQuery(it) },
+        isLoadingRepositories = repositoriesUiState.isSearching,
+        isError = repositoriesUiState.isError,
         repositories = repositoriesUiState.repositories,
         onSearchRepositories = { searchViewModel.searchRepository() },
         onClickRepository = { gotoRepositoryDetailScreen(it) },
@@ -48,6 +53,8 @@ fun RepositorySearchScreen(
 private fun RepositorySearchContent(
     searchQuery: String,
     onChangeSearchQuery: (String) -> Unit,
+    isLoadingRepositories: Boolean,
+    isError: Boolean,
     repositories: List<GithubRepoData>?,
     onSearchRepositories: () -> Unit,
     onClickRepository: (GithubRepoData) -> Unit,
@@ -61,6 +68,11 @@ private fun RepositorySearchContent(
                 .fillMaxSize()
                 .padding(it)
         ) {
+            if (isError) {
+                Alert {
+                    Text("エラーが発生しました...")
+                }
+            }
             Box(Modifier.padding(16.dp).fillMaxWidth()) {
                 SearchBar(
                     value = searchQuery,
@@ -69,19 +81,33 @@ private fun RepositorySearchContent(
                 )
             }
             if (repositories.isNullOrEmpty()) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        if (repositories == null)
-                            "レポジトリを検索してね！"
-                        else
-                            "レポジトリがありません..."
-                    )
+                Row(
+                    Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
+                    when (repositories) {
+                        null -> Text("レポジトリを検索してね！")
+                        else -> Text("レポジトリがありません...")
+                    }
+                    if (isLoadingRepositories) {
+                        CircularProgressIndicator()
+                    }
                 }
             } else {
-                RepositoryList(
-                    repositories = repositories,
-                    onClickRepository = onClickRepository,
-                )
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (isLoadingRepositories) {
+                        CircularProgressIndicator()
+                    } else {
+                        RepositoryList(
+                            repositories = repositories,
+                            onClickRepository = onClickRepository,
+                        )
+                    }
+                }
             }
         }
 
@@ -110,6 +136,8 @@ fun RepositorySearchContentPreview(
             searchQuery = "kotlin",
             onChangeSearchQuery = {},
             repositories = repositories,
+            isLoadingRepositories = false,
+            isError = false,
             onSearchRepositories = {},
             onClickRepository = {},
         )
