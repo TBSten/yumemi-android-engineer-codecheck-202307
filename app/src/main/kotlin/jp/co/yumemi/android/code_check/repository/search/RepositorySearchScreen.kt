@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.co.yumemi.android.code_check.R
+import jp.co.yumemi.android.code_check.components.Alert
 import jp.co.yumemi.android.code_check.github.model.GithubRepoData
 import jp.co.yumemi.android.code_check.github.model.exampleGithubRepoData
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
