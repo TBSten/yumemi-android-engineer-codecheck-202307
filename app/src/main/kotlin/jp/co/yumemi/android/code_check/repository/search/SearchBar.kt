@@ -1,20 +1,22 @@
 package jp.co.yumemi.android.code_check.repository.search
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,45 +44,65 @@ fun SearchBar(
 
     val textColor = MaterialTheme.colors.onSurface
 
-    Surface(
-        modifier = modifier.shadow(12.dp, MaterialTheme.shapes.large),
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colors.surface,
-        contentColor = textColor,
-        elevation = AppBarDefaults.TopAppBarElevation,
+    val shape = MaterialTheme.shapes.large
+
+    CompositionLocalProvider(
+        LocalContentColor provides MaterialTheme.colors.onSurface,
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = "search",
-                modifier = Modifier.alpha(0.8f).padding(horizontal = 8.dp),
-            )
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier.weight(1f).onFocusChanged { hasFocus = it.hasFocus },
-                textStyle = TextStyle.Default.copy(color = textColor),
-                singleLine = true,
-                cursorBrush = SolidColor(textColor),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search,
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = { onSearch() },
-                ),
-            )
-            IconButton(
-                modifier = Modifier.alpha(if (hasFocus) 0.8f else 0f),
-                onClick = { onValueChange("") },
+
+            Row(
+                modifier = Modifier
+                    .shadow(12.dp, shape = shape)
+                    .background(MaterialTheme.colors.surface, shape = shape)
+                    .weight(1f),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(
-                    Icons.Default.Close,
-                    contentDescription = "clear",
+                    Icons.Default.Search,
+                    contentDescription = "search",
+                    modifier = Modifier.alpha(0.8f).padding(horizontal = 8.dp),
+                )
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    modifier = Modifier.weight(1f).onFocusChanged { hasFocus = it.hasFocus },
+                    textStyle = TextStyle.Default.copy(color = textColor),
+                    singleLine = true,
+                    cursorBrush = SolidColor(textColor),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Search,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onSearch = { onSearch() },
+                    ),
+                )
+                IconButton(
+                    modifier = Modifier.alpha(if (hasFocus) 0.8f else 0f),
+                    onClick = { onValueChange("") },
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "clear",
+                    )
+                }
+            }
+
+            IconButton(
+                modifier = Modifier.shadow(12.dp, shape = shape)
+                    .background(MaterialTheme.colors.surface, shape = shape),
+                onClick = { onSearch() },
+            ) {
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = "search repositories",
                 )
             }
+
         }
     }
 }
