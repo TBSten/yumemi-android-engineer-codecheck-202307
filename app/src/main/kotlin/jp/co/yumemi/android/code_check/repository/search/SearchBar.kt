@@ -42,8 +42,8 @@ fun SearchBar(
     val textColor = MaterialTheme.colors.onSurface
 
     Surface(
-        modifier = modifier.shadow(12.dp),
-        shape = MaterialTheme.shapes.small,
+        modifier = modifier.shadow(12.dp, MaterialTheme.shapes.large),
+        shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colors.surface,
         contentColor = textColor,
         elevation = AppBarDefaults.TopAppBarElevation,
