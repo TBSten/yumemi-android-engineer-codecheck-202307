@@ -1,6 +1,7 @@
 package jp.co.yumemi.android.code_check.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,8 @@ import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 @Composable
 fun ListItem(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     head: (@Composable () -> Unit)? = null,
     tail: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit,
@@ -31,7 +34,8 @@ fun ListItem(
     val contentColor = MaterialTheme.colors.onSurface
 
     Column(
-        Modifier
+        modifier
+            .clickable { onClick() }
             .background(bgColor)
             .fillMaxWidth()
     ) {
