@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 @Composable
 fun SearchBar(
@@ -87,9 +88,11 @@ fun SearchBar(
 @Preview
 @Composable
 private fun SearchBarPreview() {
-    SearchBar(
-        value = "preview search bar",
-        onValueChange = {},
-        onSearch = {},
-    )
+    CodeCheckTheme {
+        SearchBar(
+            value = "preview search bar",
+            onValueChange = {},
+            onSearch = {},
+        )
+    }
 }
