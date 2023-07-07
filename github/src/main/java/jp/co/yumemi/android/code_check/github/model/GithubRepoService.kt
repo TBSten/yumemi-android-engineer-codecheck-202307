@@ -1,6 +1,5 @@
 package jp.co.yumemi.android.code_check.github.model
 
-import android.util.Log
 import com.squareup.moshi.Json
 import retrofit2.Response
 import retrofit2.http.GET
@@ -35,7 +34,6 @@ interface GithubRepoService {
         )
 
         fun toGithubRepoData(): GithubRepoData {
-            Log.d("to repo data", "${this}")
             return GithubRepoData(
                 name = this.name,
                 ownerIconUrl = this.owner?.avatarUrl,
