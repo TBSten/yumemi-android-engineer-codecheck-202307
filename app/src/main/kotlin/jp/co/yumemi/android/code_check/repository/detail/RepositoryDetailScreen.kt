@@ -1,9 +1,13 @@
 package jp.co.yumemi.android.code_check.repository.detail
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -20,11 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import jp.co.yumemi.android.code_check.components.Chip
 import jp.co.yumemi.android.code_check.github.model.GithubRepoData
 import jp.co.yumemi.android.code_check.github.model.exampleGithubRepoData
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
@@ -61,43 +67,49 @@ fun RepositoryDetailScreen(
 
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RepositoryDetailContent(
     repository: GithubRepoData,
 ) {
     val scrollState = rememberScrollState()
-    Column(Modifier.verticalScroll(scrollState).padding(horizontal = 8.dp)) {
-        val imageModifier =
-            Modifier
-                .padding(8.dp)
-                .size(250.dp)
-                .align(Alignment.CenterHorizontally)
-
-        AsyncImage(
-            model = repository.ownerIconUrl,
-            contentDescription = null,
-            contentScale = ContentScale.Inside,
-            modifier = imageModifier,
-        )
-
-        Text(
-            text = repository.name,
-            fontSize = 24.sp,
-            modifier = Modifier.align(Alignment.CenterHorizontally).padding(vertical = 16.dp),
-        )
-
-        Row {
-            Text(
-                text = if (repository.language != null) "Written in ${repository.language}" else "",
-                modifier = Modifier.weight(1f),
+    Column(
+        Modifier
+            .verticalScroll(scrollState)
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
+    ) {
+        Row(
+            Modifier.fillMaxWidth().padding(16.dp),
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            AsyncImage(
+                modifier = Modifier.size(150.dp),
+                model = repository.ownerIconUrl,
+                contentDescription = null,
+                contentScale = ContentScale.Inside,
             )
-            Column(Modifier.weight(1f), horizontalAlignment = Alignment.End) {
-                Text("${repository.stargazersCount} stars")
-                Text("${repository.watchersCount} watchers")
-                Text("${repository.forksCount} forks")
-                Text("${repository.openIssuesCount} open issues")
+            Column(Modifier.weight(1f)) {
+                Text(
+                    text = repository.name,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                )
+                FlowRow {
+                    Chip {
+                        if (repository.language !== null) Text("Written by ${repository.language}")
+                    }
+                }
             }
         }
+
+        RepoCircleCard(
+            stars = repository.stargazersCount,
+            watchers = repository.watchersCount,
+            forks = repository.forksCount,
+            openIssues = repository.openIssuesCount,
+        )
     }
 }
 
