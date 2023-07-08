@@ -91,84 +91,118 @@ fun RepoCircleCard(
         ) {
             Box {
 
-                Box(Modifier.padding(horizontal = 64.dp, vertical = 16.dp)) {
-                    Canvas(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(1f / 1f),
-                        onDraw = {
-                            var start = 0f
-                            var sweep = CircleItem.Stars.angleRatio * limitValue(
-                                stars / CircleItem.Stars.max.toFloat(),
-                                0.05f,
-                                1.00f
-                            )
-                            drawCircleItemArc(CircleItem.Stars, start, sweep)
+                RepoCircle(
+                    modifier = Modifier.padding(horizontal = 64.dp, vertical = 16.dp),
+                    stars = stars,
+                    watchers = watchers,
+                    forks = forks,
+                    openIssues = openIssues,
+                )
 
-                            start += sweep
-                            sweep = CircleItem.Watchers.angleRatio * limitValue(
-                                watchers / CircleItem.Watchers.max.toFloat(),
-                                0.05f,
-                                1.00f
-                            )
-                            drawCircleItemArc(CircleItem.Watchers, start, sweep)
-
-                            start += sweep
-                            sweep = CircleItem.Forks.angleRatio * limitValue(
-                                forks / CircleItem.Forks.max.toFloat(),
-                                0.05f,
-                                1.00f
-                            )
-                            drawCircleItemArc(CircleItem.Forks, start, sweep)
-
-                            start += sweep
-                            sweep = CircleItem.OpenIssues.angleRatio * limitValue(
-                                openIssues / CircleItem.OpenIssues.max.toFloat(),
-                                0.05f,
-                                1.00f
-                            )
-                            drawCircleItemArc(CircleItem.OpenIssues, start, sweep)
-                        },
-                    )
-                }
-
-                Box(Modifier.matchParentSize()) {
-                    Text(
-                        valueBoldText(
-                            stars,
-                            "\nstars",
-                            color = CircleItem.Stars.textColor,
-                        ),
-                        modifier = Modifier.align(Alignment.TopEnd).offset((-10).dp, (10).dp),
-                    )
-                    Text(
-                        valueBoldText(
-                            watchers,
-                            "\nwatchers",
-                            color = CircleItem.Watchers.textColor,
-                        ),
-                        modifier = Modifier.align(Alignment.BottomEnd).offset((-10).dp, (-10).dp),
-                    )
-                    Text(
-                        valueBoldText(
-                            forks,
-                            "\nforks",
-                            color = CircleItem.Forks.textColor,
-                        ),
-                        modifier = Modifier.align(Alignment.BottomStart).offset((10).dp, (-10).dp),
-                    )
-                    Text(
-                        valueBoldText(
-                            openIssues,
-                            "\nopen issues",
-                            color = CircleItem.OpenIssues.textColor,
-                        ),
-                        modifier = Modifier.align(Alignment.TopStart).offset((10).dp, (10).dp),
-                    )
-                }
+                RepoValueTexts(
+                    modifier = Modifier.matchParentSize(),
+                    stars = stars,
+                    watchers = watchers,
+                    forks = forks,
+                    openIssues = openIssues,
+                )
 
             }
         }
+    }
+}
+
+@Composable
+private fun RepoCircle(
+    modifier: Modifier = Modifier,
+    stars: Long,
+    watchers: Long,
+    forks: Long,
+    openIssues: Long,
+) {
+    Box(modifier) {
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f / 1f),
+            onDraw = {
+                var start = 0f
+                var sweep = CircleItem.Stars.angleRatio * limitValue(
+                    stars / CircleItem.Stars.max.toFloat(),
+                    0.05f,
+                    1.00f
+                )
+                drawCircleItemArc(CircleItem.Stars, start, sweep)
+
+                start += sweep
+                sweep = CircleItem.Watchers.angleRatio * limitValue(
+                    watchers / CircleItem.Watchers.max.toFloat(),
+                    0.05f,
+                    1.00f
+                )
+                drawCircleItemArc(CircleItem.Watchers, start, sweep)
+
+                start += sweep
+                sweep = CircleItem.Forks.angleRatio * limitValue(
+                    forks / CircleItem.Forks.max.toFloat(),
+                    0.05f,
+                    1.00f
+                )
+                drawCircleItemArc(CircleItem.Forks, start, sweep)
+
+                start += sweep
+                sweep = CircleItem.OpenIssues.angleRatio * limitValue(
+                    openIssues / CircleItem.OpenIssues.max.toFloat(),
+                    0.05f,
+                    1.00f
+                )
+                drawCircleItemArc(CircleItem.OpenIssues, start, sweep)
+            },
+        )
+    }
+}
+
+@Composable
+private fun RepoValueTexts(
+    modifier: Modifier = Modifier,
+    stars: Long,
+    watchers: Long,
+    forks: Long,
+    openIssues: Long,
+) {
+    Box(modifier) {
+        Text(
+            valueBoldText(
+                stars,
+                "\nstars",
+                color = CircleItem.Stars.textColor,
+            ),
+            modifier = Modifier.align(Alignment.TopEnd).offset((-10).dp, (10).dp),
+        )
+        Text(
+            valueBoldText(
+                watchers,
+                "\nwatchers",
+                color = CircleItem.Watchers.textColor,
+            ),
+            modifier = Modifier.align(Alignment.BottomEnd).offset((-10).dp, (-10).dp),
+        )
+        Text(
+            valueBoldText(
+                forks,
+                "\nforks",
+                color = CircleItem.Forks.textColor,
+            ),
+            modifier = Modifier.align(Alignment.BottomStart).offset((10).dp, (-10).dp),
+        )
+        Text(
+            valueBoldText(
+                openIssues,
+                "\nopen issues",
+                color = CircleItem.OpenIssues.textColor,
+            ),
+            modifier = Modifier.align(Alignment.TopStart).offset((10).dp, (10).dp),
+        )
     }
 }
 
