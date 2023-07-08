@@ -104,7 +104,7 @@ fun RepositoryDetailContent(
             }
         }
 
-        RepoCircle(
+        RepoCircleCard(
             stars = repository.stargazersCount,
             watchers = repository.watchersCount,
             forks = repository.forksCount,

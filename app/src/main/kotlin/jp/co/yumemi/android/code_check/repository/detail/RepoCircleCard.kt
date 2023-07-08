@@ -72,7 +72,7 @@ private sealed class CircleItem(
 }
 
 @Composable
-fun RepoCircle(
+fun RepoCircleCard(
     modifier: Modifier = Modifier,
     stars: Long,
     watchers: Long,
@@ -217,9 +217,9 @@ private fun valueBoldText(value: Long, text: String, color: Color = LocalContent
 
 @Preview
 @Composable
-fun RepoCirclePreview() {
+fun RepoCircleCardPreview() {
     CodeCheckTheme {
-        RepoCircle(
+        RepoCircleCard(
             stars = (CircleItem.Stars.max * 0.5f).toLong(),
             watchers = (CircleItem.Watchers.max * 0.6f).toLong(),
             forks = (CircleItem.Forks.max * 0.8f).toLong(),
