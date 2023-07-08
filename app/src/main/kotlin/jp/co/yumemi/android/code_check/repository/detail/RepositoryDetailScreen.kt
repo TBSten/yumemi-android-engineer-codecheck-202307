@@ -104,7 +104,12 @@ fun RepositoryDetailContent(
             }
         }
 
-        // TODO RepoCircle
+        RepoCircle(
+            stars = repository.stargazersCount,
+            watchers = repository.watchersCount,
+            forks = repository.forksCount,
+            openIssues = repository.openIssuesCount,
+        )
     }
 }
 
