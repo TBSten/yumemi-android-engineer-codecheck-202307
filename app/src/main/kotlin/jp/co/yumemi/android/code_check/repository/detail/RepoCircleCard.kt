@@ -1,5 +1,12 @@
 package jp.co.yumemi.android.code_check.repository.detail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -13,6 +20,11 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -27,6 +39,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
@@ -162,6 +175,7 @@ private fun RepoCircle(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun RepoValueTexts(
     modifier: Modifier = Modifier,
@@ -170,39 +184,87 @@ private fun RepoValueTexts(
     forks: Long,
     openIssues: Long,
 ) {
+    var launched by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        launched = true
+    }
+
+    fun enterTransitionOf(delayMillis: Int, durationMillis: Int): EnterTransition {
+        val floatSpec =
+            tween<Float>(delayMillis = delayMillis, durationMillis = durationMillis)
+        val intOffsetSpec =
+            tween<IntOffset>(delayMillis = delayMillis, durationMillis = durationMillis)
+        return fadeIn(floatSpec) + scaleIn(floatSpec) + slideInVertically(intOffsetSpec) { it / 2 }
+    }
+
+    val transitionDelay = 200
+    val transitionDucration = 300
+
     Box(modifier) {
-        Text(
-            valueBoldText(
-                stars,
-                "\nstars",
-                color = CircleItem.Stars.textColor,
+        AnimatedVisibility(
+            visible = launched,
+            enter = enterTransitionOf(
+                transitionDelay,
+                transitionDucration,
             ),
-            modifier = Modifier.align(Alignment.TopEnd).offset((-10).dp, (10).dp),
-        )
-        Text(
-            valueBoldText(
-                watchers,
-                "\nwatchers",
-                color = CircleItem.Watchers.textColor,
+            modifier = Modifier.align(Alignment.TopEnd).offset((-10).dp, (10).dp)
+        ) {
+            Text(
+                valueBoldText(
+                    stars,
+                    "\nstars",
+                    color = CircleItem.Stars.textColor,
+                ),
+            )
+        }
+        AnimatedVisibility(
+            visible = launched,
+            enter = enterTransitionOf(
+                transitionDelay + transitionDucration * 1 - 100,
+                transitionDucration,
             ),
             modifier = Modifier.align(Alignment.BottomEnd).offset((-10).dp, (-10).dp),
-        )
-        Text(
-            valueBoldText(
-                forks,
-                "\nforks",
-                color = CircleItem.Forks.textColor,
+        ) {
+            Text(
+                valueBoldText(
+                    watchers,
+                    "\nwatchers",
+                    color = CircleItem.Watchers.textColor,
+                ),
+            )
+        }
+        AnimatedVisibility(
+            visible = launched,
+            enter = enterTransitionOf(
+                transitionDelay + transitionDucration * 2 - 100,
+                transitionDucration,
             ),
             modifier = Modifier.align(Alignment.BottomStart).offset((10).dp, (-10).dp),
-        )
-        Text(
-            valueBoldText(
-                openIssues,
-                "\nopen issues",
-                color = CircleItem.OpenIssues.textColor,
+        ) {
+            Text(
+                valueBoldText(
+                    forks,
+                    "\nforks",
+                    color = CircleItem.Forks.textColor,
+                ),
+            )
+        }
+        AnimatedVisibility(
+            visible = launched,
+            enter = enterTransitionOf(
+                transitionDelay + transitionDucration * 3 - 100,
+                transitionDucration,
             ),
             modifier = Modifier.align(Alignment.TopStart).offset((10).dp, (10).dp),
-        )
+        ) {
+            Text(
+                valueBoldText(
+                    openIssues,
+                    "\nopen issues",
+                    color = CircleItem.OpenIssues.textColor,
+                ),
+            )
+        }
     }
 }
 
