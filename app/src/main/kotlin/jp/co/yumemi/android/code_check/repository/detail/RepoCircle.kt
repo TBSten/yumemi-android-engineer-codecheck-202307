@@ -4,10 +4,16 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -16,23 +22,53 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import jp.co.yumemi.android.code_check.theme.CodeCheckTheme
 
 private sealed class CircleItem(
     val max: Long,
     val color: Color,
+    val textColor: Color,
     val angleRatio: Float,
 ) {
     companion object {
         val ITEM_COUNT = 4
     }
 
-    object Stars : CircleItem(max = 50_000, color = Color(0xFFFF4B4B), 360f / ITEM_COUNT)
-    object Watchers : CircleItem(max = 3_000, color = Color(0xFF312DF8), 360f / ITEM_COUNT)
-    object Forks : CircleItem(max = 10_000, color = Color(0xFF28ED30), 360f / ITEM_COUNT)
-    object OpenIssues : CircleItem(max = 500, color = Color(0xFFF9941E), 360f / ITEM_COUNT)
+    object Stars : CircleItem(
+        max = 50_000,
+        color = Color(0xFFFF4B4B),
+        textColor = Color(0xFFFFD0D0),
+        360f / ITEM_COUNT,
+    )
+
+    object Watchers : CircleItem(
+        max = 3_000,
+        color = Color(0xFF312DF8),
+        textColor = Color(0xFFDBDAFF),
+        360f / ITEM_COUNT,
+    )
+
+    object Forks : CircleItem(
+        max = 10_000,
+        color = Color(0xFF28ED30),
+        textColor = Color(0xFFD8FFD9),
+        360f / ITEM_COUNT,
+    )
+
+    object OpenIssues :
+        CircleItem(
+            max = 500,
+            color = Color(0xFFF9941E),
+            textColor = Color(0xFFFCEEDE),
+            360f / ITEM_COUNT,
+        )
 }
 
 @Composable
@@ -50,45 +86,88 @@ fun RepoCircle(
         color = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.onSurface,
     ) {
-        Box(Modifier.padding(horizontal = 64.dp, vertical = 16.dp)) {
-            Canvas(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f / 1f),
-                onDraw = {
-                    var start = 0f
-                    var sweep = CircleItem.Stars.angleRatio * limitValue(
-                        stars / CircleItem.Stars.max.toFloat(),
-                        0.05f,
-                        1.00f
-                    )
-                    drawCircleItemArc(CircleItem.Stars, start, sweep)
+        CompositionLocalProvider(
+            LocalTextStyle provides LocalTextStyle.current.copy(fontSize = 24.sp),
+        ) {
+            Box {
 
-                    start += sweep
-                    sweep = CircleItem.Watchers.angleRatio * limitValue(
-                        watchers / CircleItem.Watchers.max.toFloat(),
-                        0.05f,
-                        1.00f
-                    )
-                    drawCircleItemArc(CircleItem.Watchers, start, sweep)
+                Box(Modifier.padding(horizontal = 64.dp, vertical = 16.dp)) {
+                    Canvas(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(1f / 1f),
+                        onDraw = {
+                            var start = 0f
+                            var sweep = CircleItem.Stars.angleRatio * limitValue(
+                                stars / CircleItem.Stars.max.toFloat(),
+                                0.05f,
+                                1.00f
+                            )
+                            drawCircleItemArc(CircleItem.Stars, start, sweep)
 
-                    start += sweep
-                    sweep = CircleItem.Forks.angleRatio * limitValue(
-                        forks / CircleItem.Forks.max.toFloat(),
-                        0.05f,
-                        1.00f
-                    )
-                    drawCircleItemArc(CircleItem.Forks, start, sweep)
+                            start += sweep
+                            sweep = CircleItem.Watchers.angleRatio * limitValue(
+                                watchers / CircleItem.Watchers.max.toFloat(),
+                                0.05f,
+                                1.00f
+                            )
+                            drawCircleItemArc(CircleItem.Watchers, start, sweep)
 
-                    start += sweep
-                    sweep = CircleItem.OpenIssues.angleRatio * limitValue(
-                        openIssues / CircleItem.OpenIssues.max.toFloat(),
-                        0.05f,
-                        1.00f
+                            start += sweep
+                            sweep = CircleItem.Forks.angleRatio * limitValue(
+                                forks / CircleItem.Forks.max.toFloat(),
+                                0.05f,
+                                1.00f
+                            )
+                            drawCircleItemArc(CircleItem.Forks, start, sweep)
+
+                            start += sweep
+                            sweep = CircleItem.OpenIssues.angleRatio * limitValue(
+                                openIssues / CircleItem.OpenIssues.max.toFloat(),
+                                0.05f,
+                                1.00f
+                            )
+                            drawCircleItemArc(CircleItem.OpenIssues, start, sweep)
+                        },
                     )
-                    drawCircleItemArc(CircleItem.OpenIssues, start, sweep)
-                },
-            )
+                }
+
+                Box(Modifier.matchParentSize()) {
+                    Text(
+                        valueBoldText(
+                            stars,
+                            "\nstars",
+                            color = CircleItem.Stars.textColor,
+                        ),
+                        modifier = Modifier.align(Alignment.TopEnd).offset((-10).dp, (10).dp),
+                    )
+                    Text(
+                        valueBoldText(
+                            watchers,
+                            "\nwatchers",
+                            color = CircleItem.Watchers.textColor,
+                        ),
+                        modifier = Modifier.align(Alignment.BottomEnd).offset((-10).dp, (-10).dp),
+                    )
+                    Text(
+                        valueBoldText(
+                            forks,
+                            "\nforks",
+                            color = CircleItem.Forks.textColor,
+                        ),
+                        modifier = Modifier.align(Alignment.BottomStart).offset((10).dp, (-10).dp),
+                    )
+                    Text(
+                        valueBoldText(
+                            openIssues,
+                            "\nopen issues",
+                            color = CircleItem.OpenIssues.textColor,
+                        ),
+                        modifier = Modifier.align(Alignment.TopStart).offset((10).dp, (10).dp),
+                    )
+                }
+
+            }
         }
     }
 }
@@ -124,6 +203,17 @@ private fun limitValue(value: Float, min: Float, max: Float): Float {
         else -> value
     }
 }
+
+@Composable
+private fun valueBoldText(value: Long, text: String, color: Color = LocalContentColor.current) =
+    buildAnnotatedString {
+        withStyle(SpanStyle(color = color)) {
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                append("$value")
+            }
+            append(text)
+        }
+    }
 
 @Preview
 @Composable
