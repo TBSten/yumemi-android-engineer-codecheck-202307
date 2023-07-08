@@ -80,7 +80,7 @@ fun RepositoryDetailContent(
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         Row(
-            Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth().padding(16.dp),
             verticalAlignment = Alignment.Top,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {

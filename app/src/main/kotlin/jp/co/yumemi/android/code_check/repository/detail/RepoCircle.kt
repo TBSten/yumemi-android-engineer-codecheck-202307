@@ -50,7 +50,7 @@ fun RepoCircle(
         color = MaterialTheme.colors.surface,
         contentColor = MaterialTheme.colors.onSurface,
     ) {
-        Box(Modifier.padding(16.dp)) {
+        Box(Modifier.padding(horizontal = 64.dp, vertical = 16.dp)) {
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
